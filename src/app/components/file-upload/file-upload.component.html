@@ -1,0 +1,207 @@
+<div class="app_heading">
+    CLOGGER
+</div>
+
+<div *ngIf="beforeFileUpload">
+    <div class="img_svg">
+        <img src="../../../assets/Home-center-design.svg">
+    </div>
+
+    <div class="upload_file_outermost_block">
+        <div class="upload_file_text_div">Upload File</div>
+        <div class="folder_svg">
+            <img src="../../../assets/folder.svg">
+        </div>
+
+        <input style="margin-left: 20px;" type="file" (change)="onFileChange($event)" multiple="false" />
+
+        <button mat-flat-button color="primary" style="margin-top:20px;margin-left:30%" (click)="onFileupload()"
+            [disabled]="!this.file">Visualize</button>
+    </div>
+</div>
+
+
+<div *ngIf="!beforeFileUpload" class="charts-div">
+    <div *ngFor="let emissionData of emissionMasterDataSource; let i=index" class="charts-subsec">
+        <div id="chart-emission">
+            <dx-chart palette="Violet" [dataSource]="emissionData">
+                <dxi-series valueField="value" [name]="this.unique[i]">
+                </dxi-series>
+                <dxo-common-series-settings #seriesSettings argumentField="args" type="line">
+                </dxo-common-series-settings>
+                <dxo-margin [bottom]="20"></dxo-margin>
+                <dxo-argument-axis [valueMarginsEnabled]="false" discreteAxisDivisionMode="crossLabels">
+                    <dxo-grid [visible]="true"></dxo-grid>
+                </dxo-argument-axis>
+                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center" itemTextPosition="bottom">
+                </dxo-legend>
+                <dxo-title text="Carbon Emission">
+                    <dxo-subtitle text="(in gCO2)"> </dxo-subtitle>
+                </dxo-title>
+                <dxo-export [enabled]="true"></dxo-export>
+                <dxo-tooltip [enabled]="true"></dxo-tooltip>
+            </dx-chart>
+        </div>
+    </div>
+
+    <div *ngFor="let energyConsumedData of energyConsumedDataSource; let i=index" class="charts-subsec">
+        <div id="chart-emission">
+            <dx-chart palette="Violet" [dataSource]="energyConsumedData">
+                <dxi-series valueField="value" [name]="this.unique[i]">
+                </dxi-series>
+                <dxo-common-series-settings #seriesSettings argumentField="args" type="line">
+                </dxo-common-series-settings>
+                <dxo-margin [bottom]="20"></dxo-margin>
+                <dxo-argument-axis [valueMarginsEnabled]="false" discreteAxisDivisionMode="crossLabels">
+                    <dxo-grid [visible]="true"></dxo-grid>
+                </dxo-argument-axis>
+                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center" itemTextPosition="bottom">
+                </dxo-legend>
+                <dxo-title text="Energy Consumed">
+                    <dxo-subtitle text="(kW)"> </dxo-subtitle>
+                </dxo-title>
+                <dxo-export [enabled]="true"></dxo-export>
+                <dxo-tooltip [enabled]="true"></dxo-tooltip>
+            </dx-chart>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!beforeFileUpload" class="avg-div">
+    <div class="avg-tiles">
+        <div class="avg-tiles-heading">Avg CPU Energy(kW)</div>
+        <div class="avg-tiles-details" *ngFor="let value of unique; let j=index">
+            <div>{{value}} : {{this.avgDataPoints[j][0].cpuEnergy}}</div>
+        </div>
+    </div>
+
+    <div class="avg-tiles">
+        <div class="avg-tiles-heading">Avg RAM Energy(kW)</div>
+        <div class="avg-tiles-details" *ngFor="let value of unique; let j=index">
+            <div>{{value}} : {{this.avgDataPoints[j][1].ramEnergy}}</div>
+        </div>
+    </div>
+
+    <div class="avg-tiles">
+        <div class="avg-tiles-heading">Avg Time Execution(s)</div>
+        <div class="avg-tiles-details" *ngFor="let value of unique; let j=index">
+            <div>{{value}} : {{this.avgDataPoints[j][2].timeExecution}}</div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!beforeFileUpload" class="pieCharts-div">
+    <dx-pie-chart id="pie" title="CPU Energy" palette="Violet" [dataSource]="cpuEnergyPCData">
+        <dxo-legend orientation="horizontal" itemTextPosition="right" horizontalAlignment="center"
+            verticalAlignment="bottom" [columnCount]="1"></dxo-legend>
+        <dxi-series argumentField="function" valueField="value">
+            <dxo-label [visible]="true">
+                <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+            </dxo-label>
+        </dxi-series>
+        <dxo-size [width]="650" [height]="370"></dxo-size>
+        <!-- <dxo-export [enabled]="true"></dxo-export> -->
+    </dx-pie-chart>
+
+    <dx-pie-chart id="pie" title="RAM Energy" palette="Violet" [dataSource]="ramEnergyPCData" style="margin-left:45px">
+        <dxo-legend orientation="horizontal" itemTextPosition="right" horizontalAlignment="center"
+            verticalAlignment="bottom" [columnCount]="1"></dxo-legend>
+        <dxi-series argumentField="function" valueField="value">
+            <dxo-label [visible]="true">
+                <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+            </dxo-label>
+        </dxi-series>
+        <dxo-size [width]="650" [height]="370"></dxo-size>
+        <!-- <dxo-export [enabled]="true"></dxo-export> -->
+    </dx-pie-chart>
+
+    <dx-pie-chart id="pie" title="Time Execution" palette="Violet" [dataSource]="timeExecPCData" style="margin-left:30px;">
+        <dxo-legend orientation="horizontal" itemTextPosition="right" horizontalAlignment="center"
+            verticalAlignment="bottom" [columnCount]="1"></dxo-legend>
+        <dxi-series argumentField="function" valueField="value">
+            <dxo-label [visible]="true">
+                <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+            </dxo-label>
+        </dxi-series>
+        <dxo-size [width]="650" [height]="370"></dxo-size>
+        <!-- <dxo-export [enabled]="true"></dxo-export> -->
+    </dx-pie-chart>
+</div>
+
+
+
+
+
+
+
+
+<!-- comapre graphs -->
+<!-- <div *ngIf="!beforeFileUpload" class="charts-div">
+    <div id="chart-emission">
+        <dx-chart palette="Violet" [dataSource]="this.emissionInfo">
+          <dxi-series
+            *ngFor="let function of distinctFunctions"
+            [valueField]="function.value"
+            [name]="function.name"
+          >
+          </dxi-series>
+          <dxo-common-series-settings
+            #seriesSettings
+            argumentField="args"
+            type="line"
+          >
+          </dxo-common-series-settings>
+          <dxo-margin [bottom]="20"></dxo-margin>
+          <dxo-argument-axis
+            [visualRange]="[0.00001, 10]"
+          >
+            <dxo-grid [visible]="true"></dxo-grid>
+          </dxo-argument-axis>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="bottom"
+          >
+          </dxo-legend>
+          <dxo-title text="Carbon Emission">
+            <dxo-subtitle text="(in gCO2)"> </dxo-subtitle>
+          </dxo-title>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-tooltip [enabled]="true"></dxo-tooltip>
+        </dx-chart>
+    </div>
+
+    <div id="chart-emission">
+        <dx-chart palette="Violet" [dataSource]="this.executionDurationInfo">
+          <dxi-series
+            *ngFor="let function of distinctFunctions"
+            [valueField]="function.value"
+            [name]="function.name"
+          >
+          </dxi-series>
+          <dxo-common-series-settings
+            #seriesSettings
+            argumentField="args"
+            type="line"
+          >
+          </dxo-common-series-settings>
+          <dxo-margin [bottom]="20"></dxo-margin>
+          <dxo-argument-axis
+            [visualRange]="[0.00, 2500]"
+          >
+            <dxo-grid [visible]="true"></dxo-grid>
+          </dxo-argument-axis>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center"
+            itemTextPosition="bottom"
+          >
+          </dxo-legend>
+          <dxo-title text="Execution Time">
+            <dxo-subtitle text="(in seconds )"> </dxo-subtitle>
+          </dxo-title>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-tooltip [enabled]="true"></dxo-tooltip>
+        </dx-chart>
+    </div>
+</div> -->
